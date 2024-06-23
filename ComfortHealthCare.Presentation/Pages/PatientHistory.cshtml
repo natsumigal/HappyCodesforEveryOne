@@ -1,0 +1,232 @@
+﻿@page
+@using System.Data;
+@using Newtonsoft.Json;
+@using System.Linq;
+@model ComfortHealthCare.Presentation.Pages.PatientHistoryModel
+@{
+    var a = ViewData["pid"];
+    ApiClient.ComfortHealthApiClient.ApiClient apiCall = new ApiClient.ComfortHealthApiClient.ApiClient("", new HttpClient());
+    var jsonString = await apiCall.GetpatientHistorybypatientAsync(10, ViewData["pid"].ToString(), (new CancellationTokenSource()).Token);
+    DataTable dt = (DataTable)JsonConvert.DeserializeObject(jsonString.Result.ToString(), (typeof(DataTable)));
+
+}
+<div class="body-class">
+    <!-- Patient Information List HTML -->
+    <div class="container">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h2>Manage <b>Patient History Details Informations</b></h2>
+                    </div>
+                    <div class="col-sm-6">
+                        <a href="#addPatientHistoryModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New</span></a>
+                        <a href="#deletePatientHistoryModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>
+                            <span class="custom-checkbox">
+                                <input type="checkbox" id="selectAll">
+                                <label for="selectAll"></label>
+                            </span>
+                        </th>
+                        <th>Weight</th>
+                        <th>Height</th>
+                        <th>BMI</th>
+                        <th>Religion</th>
+                        <th>Marital Status</th>
+                        <th>Admission Date</th>
+                        <th>Email</th>
+                        <th>Occupation</th>
+                        <th>More Details</th>
+                  @*      <th>Blood Group</th>
+                        <th>Illness History</th>
+                        <th>Allergies History</th>
+                        <th>Past Medicine Taking</th>
+                        <th>Current Medicine Taking</th>
+                        <th>Others</th>
+                        <th>Gpefindings</th>
+                        <th>Investigation</th>
+                        <th>Diagnosis</th>
+                        <th>Treatment</th>
+                        <th>CreateDate</th>
+                        <th>UpdateDate</th>*@
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        @foreach (DataRow dr in dt.Rows)
+                        {
+                            <td>
+                                <span class="custom-checkbox">
+                                    <input type="checkbox" id="checkbox1" name="options[]" value="1">
+                                    <label for="checkbox1"></label>
+                                </span>
+                            </td>
+                            <td>@dr["Weight"].ToString()</td>
+                            <td>@dr["Height"].ToString()</td>
+                            <td>@dr["Bmi"].ToString()</td>
+                            <td>@dr["Religion"].ToString()</td>
+                            <td>@dr["MaritalStatus"].ToString()</td>
+                            <td>@dr["AdmissionDate"].ToString()</td>
+                            <td>@dr["Email"].ToString()</td>
+                            <td>@dr["Occupation"].ToString()</td>
+                      @*      <td>@dr["BloodGroup"].ToString()</td>
+                            <td>@dr["IllnessHistory"].ToString()</td>
+                            <td>@dr["AllergiesHistory"].ToString()</td>
+                            <td>@dr["PastMedicineTaking"].ToString()</td>
+                            <td>@dr["CurrentMedicineTaking"].ToString()</td>
+                            <td>@dr["Others"].ToString()</td>
+                            <td>@dr["Gpefindings"].ToString()</td>
+                            <td>@dr["Investigation"].ToString()</td>
+                            <td>@dr["Diagnosis"].ToString()</td>
+                            <td>@dr["Treatment"].ToString()</td>
+                            <td>@dr["CreateDate"].ToString()</td>
+                            <td>@dr["UpdateDate"].ToString()</td>*@
+                            <td class="text-center">
+                                @*https://stackoverflow.com/questions/35715599/convert-datarow-to-dictionary-using-linq*@
+                                <a class="edit" asp-page="PatientHistoryDetail" asp-all-route-data="dr.Table.Columns.Cast<DataColumn>().ToDictionary(c => c.ColumnName, c => dr[c].ToString())">
+                                    <i class="material-icons" data-toggle="tooltip" title="History Details">description</i>
+
+                                </a>
+                            </td>
+                            <td>
+                                <a href="#editPatientHistoryModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                                <a href="#deletePatientHistoryModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                            </td>
+                        }
+                    </tr>
+                </tbody>
+            </table>
+            <div class="clearfix">
+                <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+                <ul class="pagination">
+                    <li class="page-item disabled"><a href="#">Previous</a></li>
+                    <li class="page-item"><a href="#" class="page-link">1</a></li>
+                    <li class="page-item"><a href="#" class="page-link">2</a></li>
+                    <li class="page-item active"><a href="#" class="page-link">3</a></li>
+                    <li class="page-item"><a href="#" class="page-link">4</a></li>
+                    <li class="page-item"><a href="#" class="page-link">5</a></li>
+                    <li class="page-item"><a href="#" class="page-link">Next</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- Edit Modal HTML -->
+    <div id="addPatientHistoryModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form>
+                    <div class="modal-header">
+                        <h4 class="modal-title">Add Employee</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Contact</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Identity</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Specility</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Others</label>
+                            <textarea class="form-control" required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                        <input type="submit" class="btn btn-success" value="Add">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Edit Modal HTML -->
+    <div id="editPatientHistoryModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form>
+                    <div class="modal-header">
+                        <h4 class="modal-title">Add Employee</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Contact</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Identity</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Specility</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Others</label>
+                            <textarea class="form-control" required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                        <input type="submit" class="btn btn-success" value="Add">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Delete Modal HTML -->
+    <div id="deletePatientHistoryModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form>
+                    <div class="modal-header">
+                        <h4 class="modal-title">Delete Employee</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to delete these Records?</p>
+                        <p class="text-warning"><small>This action cannot be undone.</small></p>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                        <input type="submit" class="btn btn-danger" value="Delete">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/js/main.js"></script>
+<link rel="stylesheet" href="./css/main.css" />
