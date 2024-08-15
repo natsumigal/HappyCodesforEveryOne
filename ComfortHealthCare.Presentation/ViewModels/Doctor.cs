@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-
-#nullable disable
 
 namespace ComfortHealthCare.Presentation.ViewModels
 {
@@ -10,11 +7,11 @@ namespace ComfortHealthCare.Presentation.ViewModels
         public Guid Id { get; set; }
         public string DoctorName { get; set; }
         public string DoctorIdentity { get; set; }
-        public string Specility { get; set; }
+        public string Specialty { get; set; } // Corrected spelling
         public string Others { get; set; }
         public string Password { get; set; }
         public string Contact { get; set; }
         public string DoctorEmail { get; set; }
-        public bool? Deleteflag { get; set; }
+        public bool? DeleteFlag { get; set; } // Corrected casing
     }
 }

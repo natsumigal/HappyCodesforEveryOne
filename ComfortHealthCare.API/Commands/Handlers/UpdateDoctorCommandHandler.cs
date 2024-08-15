@@ -16,8 +16,8 @@ namespace ComfortHealthCare.API.Commands.Handlers
 
             // Map with the context Doctor Model//
             DataLayer.HealthCare.DataModels.Doctor updateDoctor = new DataLayer.HealthCare.DataModels.Doctor();
-            updateDoctor.Id = doctor.Id;
-            updateDoctor.Password = doctor.Password;
+           // updateDoctor.Id = doctor.Id;
+           //updateDoctor.Password = doctor.Password;
             updateDoctor.Specility = doctor.Specility;
             updateDoctor.Others = doctor.Others;
             updateDoctor.Contact = doctor.Contact;
