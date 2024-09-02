@@ -36,6 +36,25 @@ namespace ComfortHealthCare.API.Controllers
             return await handler.HandleDoctor(num); 
         }
 
+        [HttpGet]
+        [Route("gettotalcount")]
+        public async Task<GetDoctorResponse> GetTotalCount()
+        {
+
+            var handler = new GetTotalCountQueryHandler(repository, null, null);
+            return await handler.HandleDoctor();
+        }
+
+
+        [HttpGet]
+        [Route("getdoctoridandname")]
+        public async Task<GetDoctorResponse> GetDoctorIdandName()
+        {
+
+            var handler = new GetDoctorIdandNameQueryHandler(repository, null, null);
+            return await handler.HandleDoctor();
+        }
+
         [HttpPost]
         [Route("createdoctor")]
         public async Task<DoctorCommandResponse> CreateDocter(DoctorCommand doctor)

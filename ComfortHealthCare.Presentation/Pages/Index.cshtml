@@ -1,14 +1,36 @@
 ﻿@page
 @model IndexModel
 @{
-    
+
 }
+
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        overflow: hidden; /* Remove scrollbar */
+    }
+
+    .btn-custom {
+        border: 1px black solid;
+        height: 60vh; /* 3/5 of the viewport height */
+        font-size: 4rem ; /* Larger font size */
+        display: flex;
+        justify-content: center ;
+        align-items: center ;
+        border-radius: 15px; /* Slight curve */
+    }
+</style>
 
 <div class="d-flex justify-content-center align-items-center min-vh-100">
     <div class="container text-center">
-        <a class=" m-2 btn  w-75" style="height:50%; background-color:#566787" asp-page="Doctor">Doctor</a>
-        <a class=" m-2 btn  w-75" style="height:50%; background-color:#566787" asp-page="Patient" >Patient</a>
+        <div class="row w-100">
+            <div class="col-12 col-md-6 mb-2">
+                <a class="btn-custom" style="background-color:#566787; color: white;" asp-page="Doctor">Doctor</a>
+            </div>
+            <div class="col-12 col-md-6 mb-2">
+                <a class="btn-custom" style="background-color:#90EE90; color: white;" asp-page="Patient">Patient</a>
+            </div>
+        </div>
     </div>
 </div>
-
-

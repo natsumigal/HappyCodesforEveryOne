@@ -24,8 +24,8 @@ builder.Services.AddScoped<EfCorePatientHistoryRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger();
     app.UseSwaggerUI();
     app.UseSwaggerUI(c =>
@@ -34,7 +34,7 @@ if (app.Environment.IsDevelopment())
         c.DisplayOperationId();
         c.DocExpansion(DocExpansion.None);
     });
-}
+//}
 
 app.UseHttpsRedirection();
 

@@ -40,11 +40,19 @@ namespace DataLayer.HealthCare.Repositories
         {
             return await context.Set<TEntity>().FindAsync(id);
         }
-
-        //************take first 20 records*******************
-        public async Task<List<TEntity>> GetAllbyNumber(int num)
+        public async Task<List<TEntity>> GetAllbyNumber(int pageNumber)
         {
-            return await context.Set<TEntity>().Take(num).ToListAsync();
+            const int pageSize = 10;
+
+            if (pageNumber < 1)
+            {
+                throw new ArgumentException("Page number must be greater than 0", nameof(pageNumber));
+            }
+
+            return await context.Set<TEntity>()
+                                .Skip((pageNumber - 1) * pageSize)
+                                .Take(pageSize)
+                                .ToListAsync();
         }
 
         //************End take first 20 records*******************
@@ -54,7 +62,11 @@ namespace DataLayer.HealthCare.Repositories
             return await context.Set<TEntity>().ToListAsync();
         }
 
-
+        // Method to get the total count of entities
+        public async Task<int> GetTotalCount()
+        {
+            return await context.Set<TEntity>().CountAsync();
+        }
 
         public async Task<TEntity> Update(TEntity entity)
         {

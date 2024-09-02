@@ -33,7 +33,14 @@ namespace ComfortHealthCare.API.Controllers
             var handler = new GetbyNumberQueryHandler(null,null,repository);
             return await handler.HandlePatientHistory(num);
         }
-        //HandlePatientHistorybyDoctor
+        [HttpGet]
+        [Route("gettotalcount")]
+        public async Task<GetPatientHistoryResponse> GetTotalCount()
+        {
+
+            var handler = new GetTotalCountQueryHandler(null,null, repository);
+            return await handler.HandlePatientHistory();
+        }
 
 
         [HttpGet]
@@ -47,7 +54,7 @@ namespace ComfortHealthCare.API.Controllers
 
         [HttpPost]
         [Route("createpatientHistory")]
-        public async Task<PatientHistoryCommandResponse> CreateDocter(PatientHistoryCommand patientHistory)
+        public async Task<PatientHistoryCommandResponse> CreatePatientHistory(PatientHistoryCommand patientHistory)
         {
 
             var handler = new CreatePatientHistoryCommandHandler(repository);
@@ -56,7 +63,7 @@ namespace ComfortHealthCare.API.Controllers
 
         [HttpPost]
         [Route("updaterpatientHistory")]
-        public async Task<PatientHistoryCommandResponse> UpdateDocter(PatientHistoryCommand patientHistory)
+        public async Task<PatientHistoryCommandResponse> UpdatePatientHistory(PatientHistoryCommand patientHistory)
         {
 
             var handler = new UpdatePatientHistoryCommandHandler(repository);

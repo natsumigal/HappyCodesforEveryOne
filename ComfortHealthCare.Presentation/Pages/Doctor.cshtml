@@ -4,7 +4,7 @@
 @using ApiClient.ComfortHealthApiClient;
 @model ComfortHealthCare.Presentation.Pages.DoctorModel
 @{
-    ViewData["Title"] = "Manage Doctor Informations";
+    ViewData["Title"] = "Doctor Information";
 }
 
 <div class="body-class">
@@ -14,7 +14,7 @@
             <div class="table-title">
                 <div class="row">
                     <div class="col-sm-6">
-                        <h2>Manage <b>Doctor Informations</b></h2>
+                        <h2>@ViewData["Title"]</h2>
                     </div>
                     <div class="col-sm-6">
                         <a href="#addDoctorModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New</span></a>
@@ -201,55 +201,32 @@
     </div>
 </div>
 
+<!-- Include jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Include Bootstrap JS (optional, if you are using Bootstrap) -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 <script>
     $(document).ready(function () {
         $('.edit').on('click', function () {
-            console.log('Edit button clicked');
-
             var id = $(this).data('id');
-            console.log('ID:', id);
-
             var name = $(this).data('name');
-            console.log('Name:', name);
-
             var identity = $(this).data('identity');
-            console.log('Identity:', identity);
-
             var specility = $(this).data('specility');
-            console.log('Specility:', specility);
-
             var others = $(this).data('others');
-            console.log('Others:', others);
-
             var contact = $(this).data('contact');
-            console.log('Contact:', contact);
-
             var email = $(this).data('email');
-            console.log('Email:', email);
 
             $('#editDoctorModal input[name="Doctor.Id"]').val(id);
-            console.log('Set ID input value');
-
             $('#editDoctorModal input[name="Doctor.DoctorName"]').val(name);
-            console.log('Set Name input value');
-
             $('#editDoctorModal input[name="Doctor.DoctorIdentity"]').val(identity);
-            console.log('Set Identity input value');
-
             $('#editDoctorModal input[name="Doctor.Specility"]').val(specility);
-            console.log('Set Specility input value');
-
             $('#editDoctorModal input[name="Doctor.Others"]').val(others);
-            console.log('Set Others input value');
-
             $('#editDoctorModal input[name="Doctor.Contact"]').val(contact);
-            console.log('Set Contact input value');
-
             $('#editDoctorModal input[name="Doctor.DoctorEmail"]').val(email);
-            console.log('Set Email input value');
         });
     });
+
 </script>
 <script src="~/js/main.js"></script>
 <link rel="stylesheet" href="./css/main.css" />

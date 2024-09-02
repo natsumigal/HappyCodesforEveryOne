@@ -26,7 +26,7 @@ namespace ComfortHealthCare.API.Commands.Handlers
             updatePatient.PatientAddress = Patient.PatientAddress;
             updatePatient.PatientName = Patient.PatientName;
             updatePatient.Sex = Patient.Sex;
-            await repository.Add(updatePatient).ConfigureAwait(false);
+            await repository.Update(updatePatient).ConfigureAwait(false);
             response.Information = "updated Successfully for the record";
             response.Name = Patient.PatientName;
             return response;

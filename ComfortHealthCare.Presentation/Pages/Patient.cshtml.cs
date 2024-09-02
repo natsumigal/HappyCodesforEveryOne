@@ -12,22 +12,43 @@ namespace ComfortHealthCare.Presentation.Pages
     public class PatientModel : PageModel
     {
         public List<PatientCommand> Patients { get; set; } = new List<PatientCommand>();
+        public List<DoctorCommand> Doctors { get; set; } = new List<DoctorCommand>();
         public PatientCommand Patient { get; set; } = default!;
         private readonly ApiClient.ComfortHealthApiClient.ApiClient _apiClient;
-
+        public int CurrentPage { get; set; } = 1;
+        public int TotalPages { get; set; }
         public PatientModel()
         {
-            _apiClient = new ApiClient.ComfortHealthApiClient.ApiClient("", new HttpClient());
+            _apiClient = new ApiClient.ComfortHealthApiClient.ApiClient("http://localhost:5000/", new HttpClient());
         }
 
-        public async Task OnGetAsync()
+        public async Task OnGetAsync(int pageNumber = 1)
         {
-            var jsonString = await _apiClient.GetpatientbynumberAsync(10, new CancellationTokenSource().Token);
+            const int pageSize = 10;
+            CurrentPage = pageNumber;
+
+            var jsonString = await _apiClient.GetpatientbynumberAsync(pageNumber, new CancellationTokenSource().Token);
             if (!string.IsNullOrEmpty(jsonString?.Result?.ToString()))
             {
                 Patients = JsonConvert.DeserializeObject<List<PatientCommand>>(jsonString.Result.ToString()) ?? new List<PatientCommand>();
             }
+
+            // Assuming the API provides a way to get the total count of doctors
+            var totalCnt = await _apiClient.Gettotalcount2Async(new CancellationTokenSource().Token);
+            TotalPages = (int)Math.Ceiling(Convert.ToDouble(totalCnt.Result) / (double)10);
         }
+
+        //public async Task OnGetDoctorAsync()
+        //{
+
+        //    var jsonString = await _apiClient.GetDoctor(pageNumber, new CancellationTokenSource().Token);
+        //    if (!string.IsNullOrEmpty(jsonString?.Result?.ToString()))
+        //    {
+        //        Patients = JsonConvert.DeserializeObject<List<PatientCommand>>(jsonString.Result.ToString()) ?? new List<PatientCommand>();
+        //    }
+
+        //    TotalPages = (int)Math.Ceiling(20 / (double)10);
+        //}
 
         public async Task<IActionResult> OnPostCreatePatientAsync(PatientCommand patient)
         {

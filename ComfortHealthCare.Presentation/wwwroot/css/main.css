@@ -17,6 +17,10 @@
     color: #fff;
     font-size: 24px;
 }
+.table-responsive {
+    overflow-x: auto;
+}
+
 .table-title {
     padding-bottom: 15px;
     background: #435d7d;

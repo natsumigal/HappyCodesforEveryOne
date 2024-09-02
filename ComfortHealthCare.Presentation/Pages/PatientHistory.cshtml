@@ -1,14 +1,8 @@
-﻿@page
-@using System.Data;
-@using Newtonsoft.Json;
-@using System.Linq;
+﻿@page "/PatientHistory/{pid}"
+@using HappytoHelp.LogHelpers
 @model ComfortHealthCare.Presentation.Pages.PatientHistoryModel
 @{
-    var a = ViewData["pid"];
-    ApiClient.ComfortHealthApiClient.ApiClient apiCall = new ApiClient.ComfortHealthApiClient.ApiClient("", new HttpClient());
-    var jsonString = await apiCall.GetpatientHistorybypatientAsync(10, ViewData["pid"].ToString(), (new CancellationTokenSource()).Token);
-    DataTable dt = (DataTable)JsonConvert.DeserializeObject(jsonString.Result.ToString(), (typeof(DataTable)));
-
+    ViewData["Title"] = "Patient History Information";
 }
 <div class="body-class">
     <!-- Patient Information List HTML -->
@@ -17,216 +11,374 @@
             <div class="table-title">
                 <div class="row">
                     <div class="col-sm-6">
-                        <h2>Manage <b>Patient History Details Informations</b></h2>
+                        <h2>@ViewData["Title"]</h2>
                     </div>
                     <div class="col-sm-6">
-                        <a href="#addPatientHistoryModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New</span></a>
-                        <a href="#deletePatientHistoryModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>
+                        <a href="#addPatientHistoryModal" id="add" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New</span></a>
+                        <a href="#deletePatientModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>
                     </div>
                 </div>
             </div>
-            <table class="table table-striped table-hover">
-                <thead>
-                    <tr>
-                        <th>
-                            <span class="custom-checkbox">
-                                <input type="checkbox" id="selectAll">
-                                <label for="selectAll"></label>
-                            </span>
-                        </th>
-                        <th>Weight</th>
-                        <th>Height</th>
-                        <th>BMI</th>
-                        <th>Religion</th>
-                        <th>Marital Status</th>
-                        <th>Admission Date</th>
-                        <th>Email</th>
-                        <th>Occupation</th>
-                        <th>More Details</th>
-                  @*      <th>Blood Group</th>
-                        <th>Illness History</th>
-                        <th>Allergies History</th>
-                        <th>Past Medicine Taking</th>
-                        <th>Current Medicine Taking</th>
-                        <th>Others</th>
-                        <th>Gpefindings</th>
-                        <th>Investigation</th>
-                        <th>Diagnosis</th>
-                        <th>Treatment</th>
-                        <th>CreateDate</th>
-                        <th>UpdateDate</th>*@
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        @foreach (DataRow dr in dt.Rows)
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Weight</th>
+                            <th>Height</th>
+                            <th>BMI</th>
+                            <th>Religion</th>
+                            <th>Marital Status</th>
+                            <th>Admission Date</th>
+                            <th>Email</th>
+                            <th>Occupation</th>
+                            <th>Blood Group</th>
+                            <th>Illness History</th>
+                            <th>Allergies History</th>
+                            <th>Past Medicine Taking</th>
+                            <th>Current Medicine Taking</th>
+                            <th>Others</th>
+                            <th>GPE Findings</th>
+                            <th>Investigation</th>
+                            <th>Diagnosis</th>
+                            <th>Treatment</th>
+                            <th>Create Date</th>
+                            <th>Update Date</th>
+                            <th>Update/Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var history in Model.PatientHistories)
                         {
-                            <td>
-                                <span class="custom-checkbox">
-                                    <input type="checkbox" id="checkbox1" name="options[]" value="1">
-                                    <label for="checkbox1"></label>
-                                </span>
-                            </td>
-                            <td>@dr["Weight"].ToString()</td>
-                            <td>@dr["Height"].ToString()</td>
-                            <td>@dr["Bmi"].ToString()</td>
-                            <td>@dr["Religion"].ToString()</td>
-                            <td>@dr["MaritalStatus"].ToString()</td>
-                            <td>@dr["AdmissionDate"].ToString()</td>
-                            <td>@dr["Email"].ToString()</td>
-                            <td>@dr["Occupation"].ToString()</td>
-                      @*      <td>@dr["BloodGroup"].ToString()</td>
-                            <td>@dr["IllnessHistory"].ToString()</td>
-                            <td>@dr["AllergiesHistory"].ToString()</td>
-                            <td>@dr["PastMedicineTaking"].ToString()</td>
-                            <td>@dr["CurrentMedicineTaking"].ToString()</td>
-                            <td>@dr["Others"].ToString()</td>
-                            <td>@dr["Gpefindings"].ToString()</td>
-                            <td>@dr["Investigation"].ToString()</td>
-                            <td>@dr["Diagnosis"].ToString()</td>
-                            <td>@dr["Treatment"].ToString()</td>
-                            <td>@dr["CreateDate"].ToString()</td>
-                            <td>@dr["UpdateDate"].ToString()</td>*@
-                            <td class="text-center">
-                                @*https://stackoverflow.com/questions/35715599/convert-datarow-to-dictionary-using-linq*@
-                                <a class="edit" asp-page="PatientHistoryDetail" asp-all-route-data="dr.Table.Columns.Cast<DataColumn>().ToDictionary(c => c.ColumnName, c => dr[c].ToString())">
-                                    <i class="material-icons" data-toggle="tooltip" title="History Details">description</i>
+                            <tr>
+                                <td>@Html.DisplayFor(modelItem => history.Weight)</td>
+                                <td>@Html.DisplayFor(modelItem => history.Height)</td>
+                                <td>@Html.DisplayFor(modelItem => history.Bmi)</td>
+                                <td>@Html.DisplayFor(modelItem => history.Religion)</td>
+                                <td>@Html.DisplayFor(modelItem => history.MaritalStatus)</td>
+                                <td>@Html.DisplayFor(modelItem => history.AdmissionDate)</td>
+                                <td>@Html.DisplayFor(modelItem => history.Email)</td>
+                                <td>@Html.DisplayFor(modelItem => history.Occupation)</td>
+                                <td>@Html.DisplayFor(modelItem => history.BloodGroup)</td>
+                                <td>@Html.DisplayFor(modelItem => history.IllnessHistory)</td>
+                                <td>@Html.DisplayFor(modelItem => history.AllergiesHistory)</td>
+                                <td>@Html.DisplayFor(modelItem => history.PastMedicineTaking)</td>
+                                <td>@Html.DisplayFor(modelItem => history.CurrentMedicineTaking)</td>
+                                <td>@Html.DisplayFor(modelItem => history.Others)</td>
+                                <td>@Html.DisplayFor(modelItem => history.Gpefindings)</td>
+                                <td>@Html.DisplayFor(modelItem => history.Investigation)</td>
+                                <td>@Html.DisplayFor(modelItem => history.Diagnosis)</td>
+                                <td>@Html.DisplayFor(modelItem => history.Treatment)</td>
+                                <td>@Html.DisplayFor(modelItem => history.CreateDate)</td>
+                                <td>@Html.DisplayFor(modelItem => history.UpdateDate)</td>
+                                <td class="text-center">
+                                    <a href="#editPatientHistoryModal" class="edit" data-toggle="modal"
+                                       data-id="@history.Id"
+                                       data-pid="@history.Pid"
+                                       data-weight="@history.Weight"
+                                       data-height="@history.Height"
+                                       data-bmi="@history.Bmi"
+                                       data-religion="@history.Religion"
+                                       data-maritalstatus="@history.MaritalStatus"
+                                       data-admissiondate="@history.AdmissionDate"
+                                       data-email="@history.Email"
+                                       data-occupation="@history.Occupation"
+                                       data-bloodgroup="@history.BloodGroup"
+                                       data-illnesshistory="@history.IllnessHistory"
+                                       data-allergieshistory="@history.AllergiesHistory"
+                                       data-pastmedicinetaking="@history.PastMedicineTaking"
+                                       data-currentmedicinetaking="@history.CurrentMedicineTaking"
+                                       data-others="@history.Others"
+                                       data-gpefindings="@history.Gpefindings"
+                                       data-investigation="@history.Investigation"
+                                       data-diagnosis="@history.Diagnosis"
+                                       data-treatment="@history.Treatment"
+                                       data-createdate="@history.CreateDate"
+                                       data-updatedate="@history.UpdateDate">
+                                        <i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i>
+                                    </a>
 
-                                </a>
-                            </td>
-                            <td>
-                                <a href="#editPatientHistoryModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                                <a href="#deletePatientHistoryModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-                            </td>
+                                    <a href="#deletePatientHistoryModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                </td>
+                            </tr>
                         }
-                    </tr>
-                </tbody>
-            </table>
+
+                    </tbody>
+                </table>
+            </div>
             <div class="clearfix">
-                <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+                <div class="hint-text">Showing <b>@Model.CurrentPage</b> out of <b>@Model.TotalPages</b> entries</div>
                 <ul class="pagination">
-                    <li class="page-item disabled"><a href="#">Previous</a></li>
-                    <li class="page-item"><a href="#" class="page-link">1</a></li>
-                    <li class="page-item"><a href="#" class="page-link">2</a></li>
-                    <li class="page-item active"><a href="#" class="page-link">3</a></li>
-                    <li class="page-item"><a href="#" class="page-link">4</a></li>
-                    <li class="page-item"><a href="#" class="page-link">5</a></li>
-                    <li class="page-item"><a href="#" class="page-link">Next</a></li>
+                    @if (Model.CurrentPage > 1)
+                    {
+                        <li class="page-item"><a href="?page=@(Model.CurrentPage - 1)" class="page-link">Previous</a></li>
+                    }
+                    @for (int i = 1; i <= Model.TotalPages; i++)
+                    {
+                        <li class="page-item @(Model.CurrentPage == i ? "active" : "")"><a href="?page=@i" class="page-link">@i</a></li>
+                    }
+                    @if (Model.CurrentPage < Model.TotalPages)
+                    {
+                        <li class="page-item"><a href="?page=@(Model.CurrentPage + 1)" class="page-link">Next</a></li>
+                    }
                 </ul>
             </div>
         </div>
     </div>
-    <!-- Edit Modal HTML -->
-    <div id="addPatientHistoryModal" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form>
-                    <div class="modal-header">
-                        <h4 class="modal-title">Add Employee</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label>Name</label>
-                            <input type="text" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Email</label>
-                            <input type="email" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Password</label>
-                            <input type="password" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Phone Contact</label>
-                            <input type="text" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Identity</label>
-                            <input type="text" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Specility</label>
-                            <input type="text" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Others</label>
-                            <textarea class="form-control" required></textarea>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                        <input type="submit" class="btn btn-success" value="Add">
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    <!-- Edit Modal HTML -->
+
+    <!-- Edit Patient History Modal -->
     <div id="editPatientHistoryModal" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form>
+                <form method="post" asp-page-handler="UpdatePatientHistory">
                     <div class="modal-header">
-                        <h4 class="modal-title">Add Employee</h4>
+                        <h4 class="modal-title">Edit Patient History</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     </div>
                     <div class="modal-body">
+                        <input type="hidden" name="PatientHistory.Id">
+                        <input type="hidden" name="PatientHistory.Pid">
                         <div class="form-group">
-                            <label>Name</label>
-                            <input type="text" class="form-control" required>
+                            <label>Weight</label>
+                            <input type="text" name="PatientHistory.Weight" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Height</label>
+                            <input type="text" name="PatientHistory.Height" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>BMI</label>
+                            <input type="text" name="PatientHistory.Bmi" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Religion</label>
+                            <input type="text" name="PatientHistory.Religion" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Marital Status</label>
+                            <input type="text" name="PatientHistory.MaritalStatus" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Admission Date</label>
+                            <input type="text" name="PatientHistory.AdmissionDate" class="form-control" required>
                         </div>
                         <div class="form-group">
                             <label>Email</label>
-                            <input type="email" class="form-control" required>
+                            <input type="email" name="PatientHistory.Email" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label>Phone Contact</label>
-                            <input type="text" class="form-control" required>
+                            <label>Occupation</label>
+                            <input type="text" name="PatientHistory.Occupation" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label>Identity</label>
-                            <input type="text" class="form-control" required>
+                            <label>Blood Group</label>
+                            <input type="text" name="PatientHistory.BloodGroup" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label>Specility</label>
-                            <input type="text" class="form-control" required>
+                            <label>Illness History</label>
+                            <input type="text" name="PatientHistory.IllnessHistory" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Allergies History</label>
+                            <input type="text" name="PatientHistory.AllergiesHistory" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Past Medicine Taking</label>
+                            <input type="text" name="PatientHistory.PastMedicineTaking" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Current Medicine Taking</label>
+                            <input type="text" name="PatientHistory.CurrentMedicineTaking" class="form-control" required>
                         </div>
                         <div class="form-group">
                             <label>Others</label>
-                            <textarea class="form-control" required></textarea>
+                            <input type="text" name="PatientHistory.Others" class="form-control" required>
                         </div>
+                        <div class="form-group">
+                            <label>GPE Findings</label>
+                            <input type="text" name="PatientHistory.Gpefindings" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Investigation</label>
+                            <input type="text" name="PatientHistory.Investigation" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Diagnosis</label>
+                            <input type="text" name="PatientHistory.Diagnosis" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Treatment</label>
+                            <input type="text" name="PatientHistory.Treatment" class="form-control" required>
+                        </div>
+                            <input type="hidden" name="PatientHistory.CreateDate" class="form-control" required>
+                            <input type="hidden" name="PatientHistory.UpdateDate" class="form-control" required>
                     </div>
                     <div class="modal-footer">
-                        <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                        <input type="submit" class="btn btn-success" value="Add">
+                        <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel" />
+                        <button type="submit" class="btn btn-primary" value="Save">Save</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-    <!-- Delete Modal HTML -->
-    <div id="deletePatientHistoryModal" class="modal fade">
+
+    <!-- Add Patient History Modal -->
+    <div id="addPatientHistoryModal" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form>
+                <form method="post" asp-page-handler="CreatePatientHistory">
                     <div class="modal-header">
-                        <h4 class="modal-title">Delete Employee</h4>
+                        <h4 class="modal-title">Add Patient History</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     </div>
                     <div class="modal-body">
-                        <p>Are you sure you want to delete these Records?</p>
-                        <p class="text-warning"><small>This action cannot be undone.</small></p>
+                        <input type="hidden" name="PatientHistory.Pid">
+                        <div class="form-group">
+                            <label>Weight</label>
+                            <input type="text" name="PatientHistory.Weight" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Height</label>
+                            <input type="text" name="PatientHistory.Height" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>BMI</label>
+                            <input type="text" name="PatientHistory.Bmi" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Religion</label>
+                            <input type="text" name="PatientHistory.Religion" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Marital Status</label>
+                            <input type="text" name="PatientHistory.MaritalStatus" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Admission Date</label>
+                            <input type="datetime-local" name="PatientHistory.AdmissionDate" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" name="PatientHistory.Email" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Occupation</label>
+                            <input type="text" name="PatientHistory.Occupation" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Blood Group</label>
+                            <input type="text" name="PatientHistory.BloodGroup" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Illness History</label>
+                            <input type="text" name="PatientHistory.IllnessHistory" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Allergies History</label>
+                            <input type="text" name="PatientHistory.AllergiesHistory" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Past Medicine Taking</label>
+                            <input type="text" name="PatientHistory.PastMedicineTaking" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Current Medicine Taking</label>
+                            <input type="text" name="PatientHistory.CurrentMedicineTaking" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Others</label>
+                            <input type="text" name="PatientHistory.Others" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>GPE Findings</label>
+                            <input type="text" name="PatientHistory.Gpefindings" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Investigation</label>
+                            <input type="text" name="PatientHistory.Investigation" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Diagnosis</label>
+                            <input type="text" name="PatientHistory.Diagnosis" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Treatment</label>
+                            <input type="text" name="PatientHistory.Treatment" class="form-control" required>
+                        </div>
+                            <input type="hidden" name="PatientHistory.CreateDate" class="form-control" required>                          
+                            <input type="hidden" name="PatientHistory.UpdateDate" class="form-control" required>
                     </div>
                     <div class="modal-footer">
-                        <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                        <input type="submit" class="btn btn-danger" value="Delete">
+                        <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel" />
+                        <button type="submit" class="btn btn-primary" value="Save">Save</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+
 </div>
+
+<!-- Include jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Include Bootstrap JS (optional, if you are using Bootstrap) -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#add').on('click', function () {
+            $('#addPatientHistoryModal input[name="PatientHistory.Pid"]').val('@Model.Pid');
+        
+        });
+    });
+    $(document).ready(function () {
+        $('.edit').on('click', function () {
+            var id = $(this).data('id');
+            var pid = $(this).data('pid');
+            var weight = $(this).data('weight');
+            var height = $(this).data('height');
+            var bmi = $(this).data('bmi');
+            var religion = $(this).data('religion');
+            var maritalStatus = $(this).data('maritalstatus');
+            var admissionDate = $(this).data('admissiondate');
+            var email = $(this).data('email');
+            var occupation = $(this).data('occupation');
+            var bloodGroup = $(this).data('bloodgroup');
+            var illnessHistory = $(this).data('illnesshistory');
+            var allergiesHistory = $(this).data('allergieshistory');
+            var pastMedicineTaking = $(this).data('pastmedicinetaking');
+            var currentMedicineTaking = $(this).data('currentmedicinetaking');
+            var others = $(this).data('others');
+            var gpefindings = $(this).data('gpefindings');
+            var investigation = $(this).data('investigation');
+            var diagnosis = $(this).data('diagnosis');
+            var treatment = $(this).data('treatment');
+            var createDate = $(this).data('createdate');
+            var updateDate = $(this).data('updatedate');
+
+            $('#editPatientHistoryModal input[name="PatientHistory.Id"]').val(id);
+            $('#editPatientHistoryModal input[name="PatientHistory.Pid"]').val(pid);
+            $('#editPatientHistoryModal input[name="PatientHistory.Weight"]').val(weight);
+            $('#editPatientHistoryModal input[name="PatientHistory.Height"]').val(height);
+            $('#editPatientHistoryModal input[name="PatientHistory.Bmi"]').val(bmi);
+            $('#editPatientHistoryModal input[name="PatientHistory.Religion"]').val(religion);
+            $('#editPatientHistoryModal input[name="PatientHistory.MaritalStatus"]').val(maritalStatus);
+            $('#editPatientHistoryModal input[name="PatientHistory.AdmissionDate"]').val(admissionDate);
+            $('#editPatientHistoryModal input[name="PatientHistory.Email"]').val(email);
+            $('#editPatientHistoryModal input[name="PatientHistory.Occupation"]').val(occupation);
+            $('#editPatientHistoryModal input[name="PatientHistory.BloodGroup"]').val(bloodGroup);
+            $('#editPatientHistoryModal input[name="PatientHistory.IllnessHistory"]').val(illnessHistory);
+            $('#editPatientHistoryModal input[name="PatientHistory.AllergiesHistory"]').val(allergiesHistory);
+            $('#editPatientHistoryModal input[name="PatientHistory.PastMedicineTaking"]').val(pastMedicineTaking);
+            $('#editPatientHistoryModal input[name="PatientHistory.CurrentMedicineTaking"]').val(currentMedicineTaking);
+            $('#editPatientHistoryModal input[name="PatientHistory.Others"]').val(others);
+            $('#editPatientHistoryModal input[name="PatientHistory.Gpefindings"]').val(gpefindings);
+            $('#editPatientHistoryModal input[name="PatientHistory.Investigation"]').val(investigation);
+            $('#editPatientHistoryModal input[name="PatientHistory.Diagnosis"]').val(diagnosis);
+            $('#editPatientHistoryModal input[name="PatientHistory.Treatment"]').val(treatment);
+            $('#editPatientHistoryModal input[name="PatientHistory.CreateDate"]').val(createDate);
+            $('#editPatientHistoryModal input[name="PatientHistory.UpdateDate"]').val(updateDate);
+        });
+    });
+</script>
 <script src="~/js/main.js"></script>
-<link rel="stylesheet" href="./css/main.css" />
+<link rel="stylesheet" href="~/css/main.css" />

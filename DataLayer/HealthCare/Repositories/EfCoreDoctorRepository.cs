@@ -23,5 +23,14 @@ namespace DataLayer.HealthCare.Repositories
 
             return await context.Doctors.Where(k => k.DoctorName.ToString() == val).FirstOrDefaultAsync();
         }
+        public async Task<List<Doctor>> GetDoctorIdandName()
+        {
+
+            return await context.Doctors.Select(d => new Doctor
+            {
+                Id = d.Id,
+                DoctorName = d.DoctorName
+            }).ToListAsync();
+        }
     }
 }

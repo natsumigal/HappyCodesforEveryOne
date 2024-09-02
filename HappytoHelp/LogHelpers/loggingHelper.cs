@@ -6,6 +6,16 @@ using System.Threading.Tasks;
 
 namespace HappytoHelp.LogHelpers
 {
+ //usage of logging helper
+    // loggingHelper _logger = new loggingHelper("log.txt");
+    // if (Model.PatientHistory != null && Model.PatientHistory.Pid != null)
+    // {
+    //     _logger.Log(LogLevel.Info, Model.PatientHistory.Pid.ToString());
+    // }
+    // else
+    // {
+    //     _logger.Log(LogLevel.Warning, "PatientHistory or Pid is null");
+    // }
     public class loggingHelper
     {
         private string logFilePath;
@@ -27,7 +37,7 @@ namespace HappytoHelp.LogHelpers
             }
         }
 
-        public void Log(LogLevel level, string message)
+        public  void Log(LogLevel level, string message)
         {
             string timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             string logEntry = $"{timestamp},{level},{message}";

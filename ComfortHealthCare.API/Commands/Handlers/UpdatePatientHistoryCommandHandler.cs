@@ -16,7 +16,7 @@ namespace ComfortHealthCare.API.Commands.Handlers
 
             // Map with the context PatientHistory Model//
             DataLayer.HealthCare.DataModels.PatientHistoryDetail updatePatientHistory = new DataLayer.HealthCare.DataModels.PatientHistoryDetail();
-            updatePatientHistory.Id = new Guid();
+            updatePatientHistory.Id = PatientHistory.Id;
             updatePatientHistory.Pid = PatientHistory.Pid;
             updatePatientHistory.Email = PatientHistory.Email;
             updatePatientHistory.AdmissionDate = PatientHistory.AdmissionDate;
@@ -37,8 +37,8 @@ namespace ComfortHealthCare.API.Commands.Handlers
             updatePatientHistory.Treatment = PatientHistory.Treatment;
             updatePatientHistory.Weight = PatientHistory.Weight;
             updatePatientHistory.CreateDate = PatientHistory.CreateDate;
-            updatePatientHistory.UpdateDate = PatientHistory.UpdateDate;
-            await repository.Add(updatePatientHistory).ConfigureAwait(false);
+            updatePatientHistory.UpdateDate = DateTime.Now;
+            await repository.Update(updatePatientHistory).ConfigureAwait(false);
             response.Information = "updated Successfully for the record";
             // response.Name = PatientHistory.PatientHistoryName;
             return response;
