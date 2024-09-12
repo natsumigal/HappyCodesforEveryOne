@@ -1,4 +1,4 @@
-﻿@page 
+﻿@page
 @using System.Data
 @using Newtonsoft.Json
 @model ComfortHealthCare.Presentation.Pages.PatientModel
@@ -142,8 +142,10 @@
                             <input type="text" id="Contact" name="Contact" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label for="DoctorId">Doctor ID</label>
-                            <input type="text" id="DoctorId" name="DoctorId" class="form-control" required>
+                            <label for="DoctorId">Doctor</label>
+                            <select name="DoctorId" id="DoctorId" asp-for="Patient.DoctorId" class="form-control" asp-items="Model.Doctors">
+                                <option value="">Select a doctor</option>
+                            </select>
                         </div>
                     </div>
                     <div class="modal-footer">

@@ -15,8 +15,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APIClient", "APIClient\APIC
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HappytoHelp", "HappytoHelp\HappytoHelp.csproj", "{699F5720-9021-4CA6-852A-22EC2F6F2FD2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "xml_curd_form", "xml_curd_form\xml_curd_form.csproj", "{F51BE23E-4B5A-4CEA-8EBF-81E22757959B}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,10 +45,6 @@ Global
 		{699F5720-9021-4CA6-852A-22EC2F6F2FD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{699F5720-9021-4CA6-852A-22EC2F6F2FD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{699F5720-9021-4CA6-852A-22EC2F6F2FD2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F51BE23E-4B5A-4CEA-8EBF-81E22757959B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F51BE23E-4B5A-4CEA-8EBF-81E22757959B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F51BE23E-4B5A-4CEA-8EBF-81E22757959B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F51BE23E-4B5A-4CEA-8EBF-81E22757959B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
